@@ -1,24 +1,466 @@
 ---
 title: "HW3"
-author: "Vicki Hertzberg"
+author: "Roxana Chicas"
 date: "February 8, 2017"
-output: html_document
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+wine <- read.csv("White_wines.csv",
+               header = TRUE)
+
+```
+
+```{r}
+# see what is in the White_wine dataset
+summary(wine)
+```
+
+```{r}
+# divide the dataset into a training and a testing set based on a random uniform number on fixed seed
+set.seed(20170208)
+wine$group <- runif(length(wine$quality), min = 0, max = 1)
+summary(wine)
+wine.train <- subset(wine, group <= 0.90)
+wine.test <- subset(wine, group > 0.90)
+
+```
+
+Now let's graph our training set data.
+```{r}
+#graph fixed.acidity on quality for testing dataset
+plot(quality ~ fixed.acidity, data = wine.train)
+```
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(fixed.acidity)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$fixed.acidity), 
+                              sd = sd(wine.train$fixed.acidity)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of Fixed Acidity",
+       x = "fixed.acidity",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(volatile.acidity)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$volatile.acidity), 
+                              sd = sd(wine.train$volatile.acidity)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of Volatile Acidity",
+       x = "volatile.acidity",
+       y = "Density")
+```
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(citric.acid)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$citric.acid), 
+                              sd = sd(wine.train$citric.acid)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of citric acid",
+       x = "citric.acid",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(residual.sugar)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$residual.sugar), 
+                              sd = sd(wine.train$residual.sugar)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of residual sugar",
+       x = "residual.sugar",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(chlorides)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$chlorides), 
+                              sd = sd(wine.train$chlorides)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of chlorides",
+       x = "chlorides",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(free.sulfur.dioxide)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$free.sulfur.dioxide), 
+                              sd = sd(wine.train$free.sulfur.dioxide)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of free sulfur dioxide",
+       x = "free.sulfur.dioxide",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(total.sulfur.dioxide)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$total.sulfur.dioxide), 
+                              sd = sd(wine.train$total.sulfur.dioxide)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of total sulfur dioxide",
+       x = "total.sulfur.dioxide",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(total.sulfur.dioxide)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$total.sulfur.dioxide), 
+                              sd = sd(wine.train$total.sulfur.dioxide)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of total sulfur dioxide",
+       x = "total.sulfur.dioxide",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(density)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$density), 
+                              sd = sd(wine.train$density)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of density",
+       x = "density",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(pH)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$pH), 
+                              sd = sd(wine.train$pH)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distrubution of pH",
+       x = "pH",
+       y = "Density")
+```
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(sulphates)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$sulphates), 
+                              sd = sd(wine.train$sulphates)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of sulphates",
+       x = "Sulfphates",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(alcohol)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$alcohol), 
+                              sd = sd(wine.train$alcohol)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of alcohol",
+       x = "alcohol",
+       y = "Density")
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+wine.train %>%
+  ggplot(aes(quality)) +
+    geom_histogram(aes(y=..density..),
+                   colour="black",fill="yellow",
+                   binwidth=5) + 
+    stat_function(fun = dnorm, 
+                  args = list(mean = mean(wine.train$quality), 
+                              sd = sd(wine.train$quality)), 
+                  lwd = 1, 
+                  col = 'red') +
+  labs(title = "Distribution of quality",
+       x = "quality",
+       y = "Density")
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=fixed.acidity, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ fixed.acidity, data = wine.train)
+  summary (reg2)
+```
 
 
-You are now the data slave to the principal investigator Dr. Vinca Monster. Dr. M is in the Grape Program at State U, and you are just a poor graduate student trying to get your degree. Dr. M is interested in wine preferences and the influences of physico-chemical properties on preferences. Her laboratory has gathered an extensive dataset on Portugese white varietals.
+```{r}
+wine.train %>%
+  ggplot(aes(x=volatile.acidity, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ volatile.acidity, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=citric.acid, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ citric.acid, data = wine.train)
+  summary (reg2)
+```
+```{r}
+wine.train %>%
+  ggplot(aes(x=residual.sugar, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ residual.sugar, data = wine.train)
+  summary (reg2)
+```
+```{r}
+wine.train %>%
+  ggplot(aes(x=chlorides, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ chlorides, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=free.sulfur.dioxide, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ free.sulfur.dioxide, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=total.sulfur.dioxide, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ total.sulfur.dioxide, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=density, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ density, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=pH, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ pH, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=sulphates, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ sulphates, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+wine.train %>%
+  ggplot(aes(x=alcohol, y=quality)) +
+    geom_point(position = "jitter")
+```
+```{r}
+  reg2 <-lm(quality ~ alcohol, data = wine.train)
+  summary (reg2)
+```
+
+```{r}
+library(car)
+#produce a scatterplot matrix 
+scatterplotMatrix(~ fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, span =0.5, data = wine)
+```
+the variables "residual sugar" and "chlorides" look kind of wonky so transformation may help.
+
+```{r}
+library(car)
+scatterplotMatrix(~ fixed.acidity + volatile.acidity + citric.acid + log2(residual.sugar) + log2(chlorides) + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, span =0.5, data = wine)
+```
 
 
-You will find the white_wines.csv file and its description in my github repo (https://github.com/vhertzb/Regression-1)[https://github.com/vhertzb/Regression-1].
+```{r}
+# run regression with all variables and transformation
+wine.mod1 <- lm(quality ~  fixed.acidity + volatile.acidity + citric.acid + log2(residual.sugar) + log2(chlorides) + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, data= wine.train)
 
-Please use the techniques you have learned in the last two classes, specifically exploratory data analysis and linear regression, to determine association of the wine properties on preference. 
+#and see what we have
+summary(wine.mod1)
+```
 
-Prepare a report for presentation at the next Monster lab meeting about this dataset.
+```{r}
+# regression ripped without non-significant variables
+wine.mod2 <- lm(quality ~ volatile.acidity + log2(residual.sugar) + log2(chlorides) + free.sulfur.dioxide + density + pH + sulphates + alcohol, data= wine.train)
 
-Rubric:
+#and here we have it
+summary(wine.mod2)
+```
+The ajusted R-square remained the same in both models 0.2777.  The second model therefore is more parsomonious since it includes less variables.  
 
-Exploration (summary statistics (the m's), univariate graphs, multivariate graphs)
-Regression (Models explored, diagnostics completed, final model choice, justification)
+```{r results="asis"}
+library(stargazer)
+# compare the results of the two regression models
+stargazer(wine.mod1,wine.mod2,title="Comparison of 2 Regression outputs",type="html",align=TRUE)
+```
 
-Please include a concluding paragraph (or two) about the implications of your findings.
+```{r}
+# diagnostics for the first model
+residualPlots(wine.mod1)
+
+```
+```{r}
+#added variable plots
+avPlots(wine.mod1, id.n=2, id.cex=0.7)
+#id.n - identify n most influential observations
+#id.cex - controls the size of the dot
+```
+```{r}
+vif(wine.mod1)
+```
+```{r}
+#make influence plot
+influencePlot(wine.mod1, id.n=3)
+```
+```{r}
+
+# diagnostics for the second model 
+residualPlots(wine.mod2)
+```
+```{r}
+#added variable plots
+avPlots(wine.mod2, id.n=2, id.cex=0.7)
+#id.n - identify n most influential observations
+#id.cex - controls the size of the dot
+```
+```{r}
+vif(wine.mod2)
+```
+```{r}
+#make influence plot
+influencePlot(wine.mod2, id.n=3)
+```
+```{r}
+# regression ripped without non-significant variables and removed variables with vif >4
+wine.mod3 <- lm(quality ~ volatile.acidity + log2(chlorides) + free.sulfur.dioxide + pH + sulphates, data= wine.train)
+
+#and here we have it
+summary(wine.mod3)
+```
+Once vif >4 removed from model 2 "free sulfur dioxide" became non-significant and ajusted R-square reduced to 0.1156 from 0.2777 in model 2.
+
+
+Based on the the three models ran, the second model is the better model.  Model 2 does not have non-significant variables and the ajusted R-square is 0.2777.  Model 1 and 2 have the same R-square but model 2 is parsimonious since it has feweer variables.  Model three was not used because the ajusted R-square decrease dramtically once vif >4 were removed.  According to the output in model 2 for every one unit decrease of log2(residual.sugar) there is an increase in wine quality rating  of 1.927e-01 when all other variables are held constant.  Output in model 2 also shows that for every one unit decrease of log2(chlorides) there is an decrease in wine quality rating  of -6.224e-02 when all other variables are held constant.  A one unit increase of free sulfurdioxide increases wine qulity rating of 3.003e-03 when all variables are held constant.  As one unit of density increases there is wine quality decreases of -7.381e+01.  pH showed that for every one unit increase the wine quality increased by 3.691e-01.  Sulphates show that for one unit increase there is an increase in wine quality of 4.995e-01.  Model 2 output showed that for alcohol increase of 1 unit there is an increase of wine quality of 2.584e-01.   The multiple R-squared is 0.272, indicating that 27% of the variability in wine quality rating is due to these eight independent variables.
+
+The End :)
